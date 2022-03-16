@@ -1,120 +1,181 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<link href="style.css" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
-	<script src="vaccinations.js"></script>
-	<script src="populations.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="js/populations.js"></script>
+<script src="js/vaccinations.js"></script>
 
-<body>
-
+<style>
+    th{ 
+        color:#fff;
+        }
+    .header h1 {
+    	margin-left: -2px;
+    }
+    .search-section, .header {
+    	width: 100%;
+    }
+</style>
 <div class="header">
-	<h1>COVID Vax Stats By Country</h1>
-	<p> Last Updated: March 16, 2022</p>
+	<div class="row">
+		<div class="col">
+			<div class="card card-body">
+				<h1>COVID Vaccine Stats</h1>
+				<p>Last Updated: March 16, 2022</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="search-section">
+	<div class="row">
+		<div class="col">
+			<div class="card card-body">
+				<input id="search-input" class="form-control" type="text" />
+			</div>
+		</div>	
+	</div>
 </div>
 
+
 <table class="table table-striped">
-	<tbody>
-	<tr class="bg-info">
-		<th data-column="country" data-order="desc">Country</th>
-		<th data-column="population" data-order="desc">Population 2020</th>
-		<th data-column="date" data-order="desc">Last Update</th>
-		<th data-column="first-dose" data-order="desc">I Hate Myself (First Dose)</th>
-		<th data-column="second-dose" data-order="desc">I Want AIDs (Second Dose)</th>
-	</tr>
-	</tbody>
-	<tbody id="myTable">
-	</tbody>
-	
+    <tr  class="bg-info">
+        <th class="th-country" data-column="country" data-order="desc">Country &#9650</th>
+        <th data-column="value" data-order="desc">Population 2020</th>
+        <th class="th-date" data-column="date" data-order="desc">Last Updated</th>
+        <th class="th-people-vaccinated" data-column="people_vaccinated" data-order="desc">I Hate Myself (First Dose)</th>
+        <th data-column="x" data-order="desc">I Want AIDS (Second Dose)</th>
+    </tr>
+
+    <tbody id="myTable">
+        
+    </tbody>
 </table>
 
 <script>
 	var merged = _.merge(_.keyBy(vaxArray, 'iso_code'), _.keyBy(popArray, 'countryiso3code'));
-	var newArray = _.values(merged);
-	buildTable(newArray);
-	function buildTable(data) {
-		var table = document.getElementById('myTable');
-		table.innerHTML = '';
-		for ( i = 0; i < data.length - 1; i++) {
+	var myArray = _.values(merged);
+	buildTable(myArray);
+	console.log(myArray);
+
+
+
+	$('#search-input').on('keyup', function() {
+		var value = $(this).val();
+		console.log('Value:', value);
+		var data = searchTable(value, myArray);
+		buildTable(data);
+	});
+
+	$('th.th-country').on('click', function(){
+		var column = $(this).data('column')
+		var order = $(this).data('order')
+		var text = $(this).html()
+		text = text.substring(0, text.length - 1)
+
+		if (order == 'desc'){
+				$(this).data('order', "asc")
+				myArray = myArray.sort((a,b) => a[column] > b[column] ? 1 : -1)
+				text += '&#9660'
+
+		} else{
+				$(this).data('order', "desc")
+				myArray = myArray.sort((a,b) => a[column] < b[column] ? 1 : -1)
+				text += '&#9650'
+
+		}
+		$(this).html(text)
+		buildTable(myArray)
+	});
+
+	function searchTable(value, data) {
+		var filteredData = [];
+
+		for (var i = 0; i < data.length; i++) {
+			value = value.toLowerCase();
 
 			/** Country Name **/
 			if (data[i].country.value == null) {
-				var country_name = data[i].country;
+				var country = data[i].country;
 			} else {
+				var country = data[i].country.value;
+			}
+			var country = country.toLowerCase();
+
+			if (country.startsWith(value)) {
+				filteredData.push(data[i]);
+			}
+		}
+
+		return filteredData;
+	}
+	function buildTable(data){
+
+		var table = document.getElementById('myTable');
+		table.innerHTML = '';
+		for (var i = 0; i < data.length; i++){
+			if (data[i].value != null && data[i].data != null) {
 				var country_name = data[i].country.value;
-			}
-
-			/** Population **/
-			if (data[i].value == null) {
-				var population = '';
-			} else {
 				var population = data[i].value;
-			}
+				/** Last Updated Date, Single Dose & Double Dose **/
 
-			/** Last Updated Date, Single Dose & Double Dose **/
-			var updated_date_length = data[i].data.length - 1;
-			var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
-			if (has_data == null) {
-				var updated_date_length = data[i].data.length -2;
+				var updated_date_length = data[i].data.length - 1;
+				
 				var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
+				if (has_data == null) {
+					var updated_date_length = data[i].data.length -2;
+					var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
+				}
+				if (has_data == null) {
+					var updated_date_length = data[i].data.length -3;
+					var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
+				}
+				if (has_data == null) {
+					var updated_date_length = data[i].data.length -4;
+					var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
+				}
+				if (has_data == null) {
+					var updated_date_length = data[i].data.length -5;
+					var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
+				}
+				if (has_data == null) {
+					var updated_date_length = data[i].data.length -6;
+					var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
+				}
+				if (has_data == null) {
+					var updated_date_length = data[i].data.length -7;
+					var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
+				}
+				if (has_data == null) {
+					var single_dose = '';
+					var double_dose = '';
+					var updated_date = '';
+				} else {
+					var single_dose = data[i].data[updated_date_length].people_vaccinated;
+					var double_dose = data[i].data[updated_date_length].people_fully_vaccinated;
+					var updated_date = data[i].data[updated_date_length].date;
+				}
+				var single_dose = ( (single_dose / population) * 100).toFixed(2) + '%';
+				var double_dose = ( (double_dose / population) * 100).toFixed(2) + '%';
+				if (double_dose == null || double_dose == 'Infinity%') {
+					single_dose = '';
+					double_dose = '';
+				}
+				if (single_dose == 'NaN%') {
+					single_dose = '';
+				}
+				var population = population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				var row = `<tr>
+						   		<td>${country_name}</td>
+						   		<td>${population}</td>
+						   		<td>${updated_date}</td>
+						   		<td>${single_dose}</td>
+						   		<td>${double_dose}</td>
+					       </tr>`
+				table.innerHTML += row;
 			}
-			if (has_data == null) {
-				var updated_date_length = data[i].data.length -3;
-				var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
-			}
-			if (has_data == null) {
-				var updated_date_length = data[i].data.length -4;
-				var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
-			}
-			if (has_data == null) {
-				var updated_date_length = data[i].data.length -5;
-				var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
-			}
-			if (has_data == null) {
-				var updated_date_length = data[i].data.length -6;
-				var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
-			}
-			if (has_data == null) {
-				var updated_date_length = data[i].data.length -7;
-				var has_data = data[i].data[updated_date_length].people_fully_vaccinated;
-			}
-			if (has_data == null) {
-				var single_dose = '';
-				var double_dose = '';
-				var updated_date = '';
-			} else {
-				var single_dose = data[i].data[updated_date_length].people_vaccinated;
-				var double_dose = data[i].data[updated_date_length].people_fully_vaccinated;
-				var updated_date = data[i].data[updated_date_length].date;
-			}
+			
 
-			var single_dose = ( (single_dose / population) * 100).toFixed(2) + '%';
-			var double_dose = ( (double_dose / population) * 100).toFixed(2) + '%';
-			if (double_dose == null || double_dose == 'Infinity%') {
-				single_dose = '';
-				double_dose = '';
-			}
-			if (single_dose == 'NaN%') {
-				single_dose = '';
-			}
-			var population = population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			var row = `<tr>
-							<td>${country_name}</td>
-							<td>${population}</td>
-							<td>${updated_date}</td>
-							<td>${single_dose}</td>
-							<td>${double_dose}</td>
-		
-					   </tr>`
-			table.innerHTML += row;
+
 		}
 	}
 
-
-
 </script>
-
-<script src="scripts.js"></script>
-</body>
-</html>
