@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="style.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script src="vaccinations.js"></script>
+	<script src="populations.js"></script>
+	<script src="scripts.js"></script>
+<body>
+
+<h1>COVID Vax Stats By Country</h1>
+<table class="table table-striped">
+	<tbody>
+	<tr class="bg-info">
+		<th>Country</th>
+		<th>ISO Code</th>
+		<th>Population 2020</th>
+		<th>Last Update</th>
+		<th>I Hate Myself</th>
+		<th>I Want AIDs</th>
+	</tr>
+	</tbody>
+	<tbody id="myTable">
+	</tbody>
+	
+</table>
+
+<script>
+
+
+	
+
+	buildTable(myArray);
+
+
+	function buildTable(data) {
+
+		
+		/** This array includes all of the ISO codes created by OWID **/
+		var allIsoCodes = [];
+		for (i = 0; i < data.length; i++) {
+			allIsoCodes.push(data[i].iso_code);
+		}
+
+
+		/** Excluded Country Codes - OWID are their created codes, not international codes **/
+		var excludedIsoCodes = ['OWID_AFR', 'OWID_ASI', 'OWID_ENG', 'OWID_EUR', 'OWID_EUN', 'OWID_HIC', 'OWID_LIC', 'OWID_LMC', 'OWID_NAM', 'OWID_CYN', 'OWID_NIR', 'OWID_OCE', 'OWID_SCT', 'BES', 'OWID_SAM', 'OWID_UMC', 'OWID_WLS', 'OWID_WRL', 'OWID_KOS', 'OWID_SCT', 'OWID_LIC', 'COK', 'COG', 'FLK' ];
+
+
+
+		/** Here we remove the excluded country codes from the all ISO array **/
+
+		const countriesToDeleteSet = new Set(excludedIsoCodes);
+
+		const allIsoCodesMinusExcluded = allIsoCodes.filter((name) => {
+			return !countriesToDeleteSet.has(name);
+		});
+
+		let worldBankURLCode = allIsoCodesMinusExcluded.toString().replaceAll(',',';');
+
+		console.log(worldBankURLCode);
+
+
+
+
+		// let allIsoString = allIsoCodes.toString().replaceAll(',',';');
+
+
+
+
+		var table = document.getElementById('myTable');
+
+
+
+		for ( i = 0; i < data.length; i++) {
+			var isoCurrent = data[i].iso_code;
+			if(excludedIsoCodes.indexOf(isoCurrent) == -1) {
+				var date_number = data[i].data.length - 1;
+				var row = `<tr>
+								<td>${data[i].country}</td>
+								<td>${data[i].iso_code}</td>
+								<td>${data[i].data[date_number].date}</td>
+								<td>${data[i].data[date_number].people_vaccinated_per_hundred}</td>
+								<td>${data[i].data[date_number].people_fully_vaccinated_per_hundred}</td>
+						   </tr>`
+				table.innerHTML += row;
+			}
+
+		
+		}
+	}
+
+</script>
+
+</body>
+</html>
