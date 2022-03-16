@@ -4,8 +4,11 @@ body {
 	margin: 0;
 }
 
-h1 {
+.header {
 	padding: 0.75rem;
+}
+h1 {
+	margin-left: -2px;
 }
 
 table {
