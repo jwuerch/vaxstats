@@ -1,5 +1,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+<script src="js/populations.js"></script>
+<script src="js/vaccinations.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <style>
@@ -43,12 +44,10 @@
 
 <script>
 
-	var myArray = [];
 
 	$('#search-input').on('keyup', function() {
 		var value = $(this).val();
-		console.log('Value:', value);
-		var data = searchTable(value, myArray);
+		var data = searchTable(value, vaxArray);
 		buildTable(data);
 	});
 
@@ -60,27 +59,25 @@
 
 		if(order == 'desc'){
 			$(this).data('order', "asc")
-			myArray = myArray.sort((a,b) => a[column] > b[column] ? 1 : -1)
+			vaxArray = vaxArray.sort((a,b) => a[column] > b[column] ? 1 : -1)
 			text += '&#9660'
 
 		}else{
 			$(this).data('order', "desc")
-			myArray = myArray.sort((a,b) => a[column] < b[column] ? 1 : -1)
+			vaxArray = vaxArray.sort((a,b) => a[column] < b[column] ? 1 : -1)
 			text += '&#9650'
 
 		}
 		$(this).html(text)
-		buildTable(myArray)
+		buildTable(vaxArray)
 	})
-
-	buildTable(myArray)
 
 	function searchTable(value, data) {
 		var filteredData = [];
 
 		for (var i = 0; i < data.length; i++) {
 			value = value.toLowerCase();
-			var name = data[i].first_name.toLowerCase();
+			var name = data[i].country.toLowerCase();
 
 			if (name.startsWith(value)) {
 				filteredData.push(data[i]);
@@ -90,15 +87,8 @@
 		return filteredData;
 	}
 
-	$.ajax({
-		method: 'GET',
-		url: 'https://reqres.in/api/users',
-		success:function(response) {
-			myArray = response.data;
-			buildTable(myArray);
-			console.log(myArray);
-		}
-	})
+	buildTable(vaxArray)
+
 
 	function buildTable(data){
 
@@ -106,7 +96,7 @@
 		table.innerHTML = ''
 		for (var i = 0; i < data.length; i++){
 			var row = `<tr>
-							<td>${data[i].first_name}</td>
+							<td>${data[i].country}</td>
 							<td>${data[i].last_name}</td>
 							<td>${data[i].email}</td>
 					  </tr>`
