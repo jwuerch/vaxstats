@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<header class="header">
+		<div class="card--block">
+			<h1>COVID Vacccine Stats</h1>
+			<p>Refresh the page for the latest updates.</p>
+		</div>
+	</header>
+	<body>
+
+		<div class="card--block">
+			<input id="search-input" class="form-control" type="text" placeholder="Search for a Country" />
+		</div>
+
+		<table class="table table-striped">
+			<tr class="bg-info">
+				<th class="th-click th-country" class="bg-info" data-colname="country" data-order="asc">Country &#9660</th>
+				<th class="th-click th-population" data-colname="population" data-order="asc">Population &#9660</th>
+				<th class="th-click th-single-dose" data-colname="single_dose" data-order="asc">Single Dose &#9660</th>
+				<th class="th-click th-double-dose" data-colname="double-dose" data-order="asc">Double Dose &#9660</th>
+
+			</tr>
+			<tbody id="myTable">
+
+			</tbody>
+		</table>
+		<script src="js/data.js"></script>
+		<script src="js/scripts.js"></script>
+	</body>
+</html>
