@@ -65,11 +65,11 @@ th {
 	padding: 5px;
 	margin: 16px;
 	font-size: 12px;
-	width: 250px;
+	width: 175px;
 	border: 1px solid #e4e4e4;
 	z-index: 2;
-	top: -60px;
-	right: -25px;
+	top: -65px;
+	left: -20px;
 }
 
 .tooltip-content p {
