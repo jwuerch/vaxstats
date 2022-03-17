@@ -2,10 +2,10 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <style>
-    th{ 
-        cursor: pointer;
-        color:#fff;
-            }
+	th {
+		cursor: pointer;
+		color: #fff;
+	}
 </style>
 
 <div class="row">
@@ -16,124 +16,191 @@
 	</div>
 </div>
 
-
 <table class="table table-striped">
-    <tr  class="bg-info">
-        <th  class="th-country" class="bg-info" data-colname="country" data-order="asc">First Name &#9660</th>
-        <th  class="th-population th-sort-asc" data-colname="value" data-order="asc">Population &#9660</th>
-        <th  class="th-x" data-colname="email" data-order="asc">Email &#9660</th>
-    </tr>
-    <tbody id="myTable">
-        
-    </tbody>
+	<tr class="bg-info">
+		<th class="th-click th-country" class="bg-info" data-colname="country" data-order="asc">Country &#9660</th>
+		<th class="th-click th-population" data-colname="population" data-order="asc">Population &#9660</th>
+		<th class="th-click th-last-updated" data-colname="last_updated" data-order="asc">Last Updated &#9660</th>
+		<th class="th-click th-single-dose" data-colname="single_dose" data-order="asc">Single Dose &#9660</th>
+		<th class="th-click th-double-dose" data-colname="double-dose" data-order="asc">Double Dose &#9660</th>
+
+	</tr>
+	<tbody id="myTable">
+
+	</tbody>
 </table>
 
-
 <script>
+	var vaccinations = [];
+	var populations = [];
+	var tableData = [];
 
-	var myArray = [];
-	var popArray = [];
-
-	/** This data set needs to load after population data **/
-	setTimeout(function() {
-		var rawbase = 'https://raw.githubusercontent.com/';
-		var jsonloc = 'owid/covid-19-data/0dd36b226c30db7682dd7256438a500a314ce8e6/public/data/vaccinations/vaccinations.json';
-		$.getJSON(rawbase + jsonloc, function(data) {
-			myArray = data;
-			console.log(myArray);
-			buildTable(myArray);
-
+	$(function () {
+		getPopulations();
+	})
+	function getPopulations() {
+		let rawbase = 'https://api.worldbank.org/v2/';
+		let jsonloc = 'countries/all/indicators/SP.POP.TOTL?format=json&date=2020&per_page=300';
+		$.getJSON(rawbase + jsonloc, function (data) {
+			populations = data[1];
+			console.log('Population Data:', populations);
+			getVaccinations();
 		});
-	},500)
+	}
+
+	function getVaccinations() {
+		let rawbase = 'https://raw.githubusercontent.com/';
+		let jsonloc = 'owid/covid-19-data/0dd36b226c30db7682dd7256438a500a314ce8e6/public/data/vaccinations/vaccinations.json';
+		$.getJSON(rawbase + jsonloc, function (data) {
+			vaccinations = data;
+			structureData();
+			console.log('Vaccination Data:', vaccinations);
+			buildTable(tableData);
+		});
+	}
+	function structureData() {
+		tableData = [];
+		for (let i = 0; i < vaccinations.length; i++) {
+			let x = 0;
+			while (x < populations.length) {
+				if (populations[x].countryiso3code == vaccinations[i].iso_code) {
+					var population = populations[x].value;
+					break;
+				} else {
+
+					var population = '';
+				}
+				x++;
+			}
+				/** Last Updated Date, Single Dose & Double Dose **/
+
+                var updated_date_length = vaccinations[i].data.length - 1;
+                
+                var has_data = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                // var j = updated_date_length;
+                // var i = 0;
+                // while (j >= 0) {
+                // 	if (has_date == null) {
+                // 		updated_date_length = vaccinations[i].data.length - i;
+                // 		has_data = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                // 	} else {
+                // 		var single_dose = vaccinations[i].data[updated_date_length].people_vaccinated;
+                // 		break;
+                // 	}
+                // 	i++
+                // 	j--
+                // }
+                if (has_data == null) {
+                    var updated_date_length = vaccinations[i].data.length -2;
+                    var has_data = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                }
+                if (has_data == null) {
+                    var updated_date_length = vaccinations[i].data.length -3;
+                    var has_data = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                }
+                if (has_data == null) {
+                    var updated_date_length = vaccinations[i].data.length -4;
+                    var has_data = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                }
+                if (has_data == null) {
+                    var updated_date_length = vaccinations[i].data.length -5;
+                    var has_data = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                }
+                if (has_data == null) {
+                    var updated_date_length = vaccinations[i].data.length -6;
+                    var has_data = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                }
+                if (has_data == null) {
+                    var updated_date_length = vaccinations[i].data.length -7;
+                    var has_data = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                }
+                if (has_data == null) {
+                    var single_dose = '';
+                    var double_dose = '';
+                    var updated_date = '';
+                } else {
+                    var single_dose = vaccinations[i].data[updated_date_length].people_vaccinated;
+                    var double_dose = vaccinations[i].data[updated_date_length].people_fully_vaccinated;
+                    var updated_date = vaccinations[i].data[updated_date_length].date;
+                }
+                single_dose = ( (single_dose / population) * 100).toFixed(2);
+                double_dose = ( (double_dose / population) * 100).toFixed(2);
+                single_dose = single_dose + '%';
+                double_dose = double_dose + '%';
+                if (single_dose == null || single_dose == 'NaN%') {
+                	var single_dose = '';
+                } else {
+
+                }
 
 
-	var rawbase = 'https://api.worldbank.org/v2/';
-	var jsonloc = 'countries/all/indicators/SP.POP.TOTL?format=json&date=2020&per_page=300';
-	$.getJSON(rawbase + jsonloc, function(data) {
-		popArray = data[1];
-		console.log(popArray);
+                
+     	    population = population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			tableData.push({
+				country: vaccinations[i].country,
+				population: population,
+				last_updated: vaccinations[i].data[updated_date_length].date,
+				single_dose: single_dose,
+				double_dose: double_dose
+			});
+		}
+	}
+
+
+	$('th').on('click', function () {
+		let column = $(this).data('colname')
+		let order = $(this).data('order')
+		let text = $(this).html()
+		text = text.substring(0, text.length - 1);
+		if (order == 'desc') {
+			tableData = tableData.sort((a, b) => a[column] > b[column] ? 1 : -1);
+			$(this).data("order", "asc");
+			text += '&#9660'
+		} else {
+			tableData = tableData.sort((a, b) => a[column] < b[column] ? 1 : -1);
+			$(this).data("order", "desc");
+			text += '&#9650'
+		}
+
+		$(this).html(text)
+		buildTable(tableData);
 	});
 
+	$('#search-input').on('keyup', function () {
+		let value = $(this).val();
+		let data = searchTable(value);
+		buildTable(data);
+	})
+
+	function searchTable(value) {
+		let filteredData = [];
+
+		for (let i = 0; i < tableData.length; i++) {
+			value = value.toLowerCase();
+			let name = tableData[i].country.toLowerCase();
+
+			if (name.includes(value)) {
+				filteredData.push(tableData[i]);
+			}
+		}
 
 
+		return filteredData;
+	}
 
-	 $('th').on('click', function(){
-	     var column = $(this).data('colname')
-	     var order = $(this).data('order')
-	     var text = $(this).html()
-	     text = text.substring(0, text.length - 1);
-	     if (order == 'desc'){
-	        myArray = myArray.sort((a, b) => a[column] > b[column] ? 1 : -1);
-	        $(this).data("order","asc");
-	        text += '&#9660'
-	     }else{
-	        myArray = myArray.sort((a, b) => a[column] < b[column] ? 1 : -1);
-	        $(this).data("order","desc");
-	        text += '&#9650'
-	     }
-
-     	$(this).html(text)
-     	console.log('clicked!', column, order);
-
-     	buildTable(myArray);
-	 });
-
-	 function sortTableByColumn(table, column, asc = true) {
-
-	 }
-
-
-
-	 $('#search-input').on('keyup', function() {
-	 	var value = $(this).val();
-	 	console.log('Value:', value);
-	 	var data = searchTable(value, myArray);
-	 	buildTable(data);
-	 })
-
-
-	 function searchTable(value, data) {
-	 	var filteredData = [];
-
-	 	for (var i = 0; i < data.length; i++) {
-	 		value = value.toLowerCase();
-	 		var name = data[i].first_name.toLowerCase();
-
-	 		if (name.includes(value)) {
-	 			filteredData.push(data[i]);
-	 		}
-	 	}
-
-
-	 	return filteredData;
-	 }
-
-
-
-	function buildTable(data){
-	    var table = document.getElementById('myTable');
-	    table.innerHTML = '';
-	    for (var i = 0; i < data.length; i++){
-	    	var x = 0;
-	    	while (x < popArray.length) {
-	    		if (popArray[x].countryiso3code == data[i].iso_code) {
-	    			var population = popArray[x].value;
-	    			console.log(population);
-	    			break;
-	    		} else {
-	    			var population = '';
-	    		}
-	    		x++;
-	    	}
-	    	
-
-	        var row = `<tr>
-	                        <td>${data[i].country}</td>
-	                        <td>${population}</td>
-	                        <td>${data[i].email}</td>
+	function buildTable(data) {
+		let table = document.getElementById('myTable');
+		table.innerHTML = '';
+		for (let i = 0; i < data.length; i++) {
+			let row = `<tr>
+	                        <td>${tableData[i].country}</td>
+	                        <td>${tableData[i].population}</td>
+	                        <td>${tableData[i].last_updated}</td>
+	                        <td>${tableData[i].single_dose}</td>
+	                        <td>${tableData[i].double_dose}</td>
 	                   </tr>`
-	        table.innerHTML += row;
-	    }
+			table.innerHTML += row;
+		}
 	}
 
 </script>
