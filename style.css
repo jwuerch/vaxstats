@@ -123,3 +123,15 @@ th.th-number::after {
 	margin-bottom: 3px;
 }
 
+.search-form-wrap {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.search-form-wrap input {
+	height: 30px;
+	width: 250px;
+	font-size: 16px;
+	padding: 0 8px;
+}
+

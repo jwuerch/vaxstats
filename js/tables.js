@@ -19,14 +19,24 @@ function structureData() {
     while (date_length > 0) {
       if (vaccinations[i].data[date_length].daily_people_vaccinated != null) {
         var daily_people_vaccinated = vaccinations[i].data[date_length].daily_people_vaccinated;
-        var last_updated_daily_people_vaccinated = vaccinations[i].data[date_length].daily_people_vaccinated;
+        var last_updated_daily_people_vaccinated = vaccinations[i].data[date_length].date;
         break;
       }
 
       date_length--;
     }
 
-    /**
+    /** Daily People Vaccinated Per 100 **/
+    var date_length = vaccinations[i].data.length - 1;
+    while (date_length > 0) {
+      if (vaccinations[i].data[date_length].daily_people_vaccinated_per_hundred != null) {
+        var daily_people_vaccinated_per_hundred = vaccinations[i].data[date_length].daily_people_vaccinated_per_hundred;
+        var last_updated_daily_people_vaccinated_per_hundred = vaccinations[i].data[date_length].date;
+        break;
+      }
+
+      date_length--;
+    }
 
     /** Single Dose **/
     var date_length = vaccinations[i].data.length - 1;
@@ -66,11 +76,13 @@ function structureData() {
       population: population,
       daily_people_vaccinated: daily_people_vaccinated,
       last_updated_daily_people_vaccinated: last_updated_daily_people_vaccinated,
-      last_updated_single_dose: last_updated_single_dose,
+      daily_people_vaccinated_per_hundred: daily_people_vaccinated_per_hundred,
+      last_updated_daily_people_vaccinated_per_hundred: last_updated_daily_people_vaccinated_per_hundred,
       single_dose: single_dose,
+      last_updated_single_dose: last_updated_single_dose,
       single_dose_percent: single_dose_percent,
-      last_updated_double_dose: last_updated_double_dose,
       double_dose: double_dose,
+      last_updated_double_dose: last_updated_double_dose,
       double_dose_percent: double_dose_percent,
     });
   }
@@ -124,7 +136,18 @@ function buildTable(data) {
                       <td>${i + 1}</td>
 	                    <td>${data[i].country}</td>
 	                    <td>${addCommas(data[i].population)}</td>
-                      <td>${addCommas(data[i].daily_people_vaccinated)}</td>
+                      <td class="tooltip-container">
+                          <div class="tooltip-content">
+                            <p>Last Updated: ${changeDateFormat(data[i].last_updated_daily_people_vaccinated)}</p>
+                          </div>
+                          ${addCommas(data[i].daily_people_vaccinated)}
+                      </td>
+                      <td class="tooltip-container">
+                          <div class="tooltip-content">
+                            <p>Last Updated: ${changeDateFormat(data[i].last_updated_daily_people_vaccinated_per_hundred)}</p>
+                          </div>
+                          ${addCommas(data[i].daily_people_vaccinated_per_hundred)}
+                      </td>
 	                    <td class="tooltip-container">
     	                		<div class="tooltip-content">
     	                			<p>Last Updated: ${changeDateFormat(data[i].last_updated_single_dose)}</p>

@@ -15,10 +15,13 @@
 		<main>
 			<div class="container">
 				<h1>COVID-19 Vaccine Stats</h1>
-				<p>Refresh this page for the latest updates.</p>
+				<p>Refresh this page for the latest figures.</p>
+				<p>Hover over a figure for the last updated date.</p>
 
-				<div>
-					<input id="search-input" class="form-control" type="text" placeholder="Search for a Country" />
+				<div class="search-form-wrap">
+					<form>
+						<input id="search-input" class="form-control" type="text" placeholder="Search for a Country" />
+					</form>
 				</div>
 				<div class="table-wrap">
 					<table class="table">
@@ -28,10 +31,9 @@
 								<th class="th-click th-country" data-colname="country" data-order="asc">Country,<br />Other</th>
 								<th class="th-click th-population" data-colname="population" data-order="asc">Population</th>
 								<th class="th-click th-daily-people-vaccinated" data-colname="daily_people_vaccinated" data-order="asc">Daily<br />People<br />Vaccinated</th>
+								<th class="th-click th-daily-people-vaccinated-per-100" data-colname="daily_people_vaccinated_per_100" data-order="asc">Daily<br />People<br />Vaccinated<br />Per 100</th>
 								<th class="th-click th-single-dose" data-colname="single_dose_percent" data-order="asc">Single<br />Dose</th>
 								<th class="th-click th-double-dose" data-colname="double_dose_percent" data-order="asc">Double<br />Dose</th>
-
-
 							</tr>
 						</thead>
 						<tbody id="myTable">
