@@ -6,15 +6,38 @@ $(function () {
 	getPopulations();
 });
 
+function csvJSON(csv) {
+    const lines = csv.split('\n')
+    const result = []
+    const headers = lines[0].split(',')
+
+    for (let i = 1; i < lines.length; i++) {        
+        if (!lines[i])
+            continue
+        const obj = {}
+        const currentline = lines[i].split(',')
+
+        for (let j = 0; j < headers.length; j++) {
+            obj[headers[j]] = currentline[j]
+        }
+        result.push(obj)
+    }
+    return result
+}
+
 function getPopulations() {
-	let rawbase = 'https://api.worldbank.org/v2/';
-	let jsonloc = 'countries/all/indicators/SP.POP.TOTL?format=json&date=2020&per_page=300';
-	$.getJSON(rawbase + jsonloc, function (data) {
-		populations = data[1];
-		console.log('Population Data:', populations);
-		getVaccinations();
+	$.ajax({
+		type:'GET',
+		url: 'https://raw.githubusercontent.com/owid/covid-19-data/master/scripts/input/un/population_latest.csv',
+		dataType: 'text',
+		success: function(data) {
+			populations = csvJSON(data)
+			console.log('Population Data:', populations);
+			getVaccinations();
+		}
 	});
 }
+
 
 function getVaccinations() {
 	let rawbase = 'https://raw.githubusercontent.com/';
