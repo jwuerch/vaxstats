@@ -8,6 +8,32 @@ body {
 header {
 	border-bottom: 1px solid #e9e9e9;
 }
+main {
+	padding-bottom: 1000px;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+p {
+	margin: 0 0 20px 0;
+}
+ul {
+
+}
+li {
+	font-size: 1rem;
+	line-height: 23px;
+	margin-bottom: 5px;
+}
+h6 {
+	font-size: 1rem;
+}
+input {
+	border: 1px solid #9e9898;
+}
 
 .table-wrap {
 	position: static;
@@ -38,6 +64,9 @@ thead {
 	border: 1px solid #666;
 
 	vertical-align: bottom;
+}
+th:hover:not(#th_number) {
+	cursor: pointer;
 }
 
 tr > td:nth-child(n+3)
@@ -85,7 +114,7 @@ th.th-number::after {
 
 
 .table td {
-	vertical-align: top;
+	vertical-align: bottom;
 }
 
 
@@ -123,10 +152,28 @@ th.th-number::after {
 	margin-bottom: 3px;
 }
 
-.search-form-wrap {
-	margin-bottom: 20px;
-	text-align: center;
+.above-table-wrap {
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	flex-wrap: wrap;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 20px 0;
 }
+.above-table-wrap li:not(:first-child) {
+	margin-left: 30px;
+}
+.button {
+	background: #e4e4e4;
+	padding: 7px 10px;
+	cursor: pointer;
+	border-radius: 3px;
+	text-decoration: none;
+	color: #000 !important;
+}
+
+
 
 .search-form-wrap input {
 	height: 30px;
@@ -135,3 +182,20 @@ th.th-number::after {
 	padding: 0 8px;
 }
 
+.sources-block > p {
+	font-weight: 700;
+}
+
+
+.table-information {
+	display: none;
+	width: 100%;
+	border: 1px solid #e4e4e4;
+	margin-top: 20px;
+	padding: 15px;
+	border-radius: 3px;
+}
+
+.sources-block {
+	padding-top: 20px;
+}

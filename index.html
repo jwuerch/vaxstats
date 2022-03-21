@@ -1,9 +1,7 @@
-
 <!DOCTYPE html>
 <html>
 	<head>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="js/scripts.js"></script>
 		<link rel="stylesheet" href="style.css">
 		<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
 		<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
@@ -22,25 +20,50 @@
 				<h1>COVID-19 Vaccine Stats</h1>
 				<p>Refresh this page for the latest figures.</p>
 				<p>Hover over a figure for the last updated date.</p>
+				<div class="above-table">
+					<ul class="above-table-wrap">
+						<li><a class="button table-information-btn">Table Information</a></li>
+						<li><a class="button" href="#sources">Sources</a></li>
+						<li><div class="search-form-wrap">
+							<form>
+								<input id="search-input" class="form-control" type="text" placeholder="Search for a Country" />
+							</form>
+						</div></li>
+					</ul>
+					<div class="table-information">
+						<h6>Table Information</h6>
+						<ul>
+							<li><b>Daily People Vaccinated:</b> Total number of people who received at least one vaccine dose for the first time. If a person receives the first dose of a 2-dose vaccine for the first time, this metric goes up. If they receive their seocnd dose, it stays the same.</li>
+							<li><b>Daily People Vaccinated Per 100:</b> <i>Daily People Vaccinated</i> per 100 people in the total population of the country.</li>
+							<li><b>Single Dose:</b> Total number of people who received at least one vaccine dose. If a person receives the first dose of a 2-dose vaccine, this metric goes up by 1. If they receive the second dose, the metric stays the same.</li>
+							<li><b>Single Dose %:</b> Percentage of <i>Single Doses</i> from the total population. This number was calculated by taking the <i>Single Dose</i> column divided by the <i>Population</i> column.</li>
+							<li><b>Double Dose:</b> Total number of people who received all doses prescribed by the initial vaccination protocol. IF a person receives the first dose of a 2-dose vaccine, this metric stays the same. If they receive the second dose, the metric goes up by 1.</li>
+							<li><b>Double Dose %:</b> Percentage of <i>Double Doses</i> from the total population. This number was calculated by taking the <i>Double Dose</i> column divided by the <i>Population</i> column.</li>
+							<li><b>Total Boosters:</b> Total number of COVID-19 vaccination booster doses administered (doses administered beyond the number prescribed by the initial vaccination protocol). This number does not separate the 3rd booster from the 4th booster. If someone receives the 3rd booster and the 4th booster, this metric goes up by 2.</li>
+							<li><b>Total Boosters %:</b> Percentage of <i>Total Boosters</i> from the total population. This number was calculated by taking the <i>Total Boosters</i> column divided by the <i>Population</i> column.</li>
+							<li><b>Total Vaccinations:</b> Total number of doses administered. This is counted as a single dose, and may not equal the total number of people vaccinated, depending on the specific dose regime (e.g. people receive multiple doses). If a person receives one dose of the vaccine, this metric goes up by 1. If they receive a second dose, it goes up by 1 again.</li>
+							<li><b>Total Vaccinations Per 100:</b> <i>Total Vaccinations</i> per 100 people in the total population.</li>
 
-				<div class="search-form-wrap">
-					<form>
-						<input id="search-input" class="form-control" type="text" placeholder="Search for a Country" />
-					</form>
+						</ul>
+					</div>
 				</div>
 				<div class="table-wrap">
 					<table class="table">
 						<thead>
 							<tr>
-								<th class="th-number" data-colname="number" data-order="asc">#</th>
-								<th class="th-click th-country" data-colname="country" data-order="asc">Country,<br />Other</th>
-								<th class="th-click th-population" data-colname="populations" data-order="asc">Population</th>
-								<th class="th-click th-daily-people-vaccinated" data-colname="daily_people_vaccinated" data-order="asc">Daily<br />People<br />Vaccinated</th>
-								<th class="th-click th-daily-people-vaccinated-per-100" data-colname="daily_people_vaccinated_per_100" data-order="asc">Daily<br />People<br />Vaccinated<br />Per 100</th>
-								<th class="th-click th-single-dose" data-colname="single_dose" data-order="asc">Single<br />Dose</th>
-								<th class="th-click th-single-dose-percent" data-colname="single_dose_percent" data-order="asc">Single<br />Dose %</th>
-								<th class="th-click th-double-dose" data-colname="double_dose" data-order="asc">Double<br />Dose</th>
-								<th class="th-click th-double-dose-percent" data-colname="double_dose_percent" data-order="asc">Double<br />Dose %</th>
+								<th data-colname="number" data-order="asc" id="th_number">#</th>
+								<th data-colname="country" data-order="asc">Country,<br />Other</th>
+								<th data-colname="population" data-order="asc">Population</th>
+								<th data-colname="daily_people_vaccinated" data-order="asc">Daily<br />People<br />Vaccinated</th>
+								<th data-colname="daily_people_vaccinated_per_hundred" data-order="asc">Daily<br />People<br />Vaccinated<br />Per&nbsp;100</th>
+								<th data-colname="people_vaccinated" data-order="asc">Single Dose</th>
+								<th data-colname="people_vaccinated_per_hundred" data-order="asc">Single<br />Dose&nbsp;%</th>
+								<th data-colname="people_fully_vaccinated" data-order="asc">Double<br />Dose</th>
+								<th data-colname="people_fully_vaccinated_per_hundred" data-order="asc">Double<br />Dose&nbsp;%</th>
+								<th data-colname="total_boosters" data-order="asc">Total<br />Boosters</th>
+								<th data-colname="total_boosters_per_hundred" data-order="asc">Total<br />Boosters&nbsp;%</th>
+								<th data-colname="total_vaccinations" data-order="asc">Total<br />Vaccinations</th>
+								<th data-colname="total_vaccinations_per_hundred" data-order="asc">Total<br />Vaccinations<br />Per&nbsp;100</th>
 							</tr>
 						</thead>
 						<tbody id="myTable">
@@ -50,6 +73,14 @@
 				</div>
 				<script src="js/data.js"></script>
 				<script src="js/tables.js"></script>
+				<script src="js/scripts.js"></script>
+				<span id="sources"></span>
+				<div class="sources-block">
+					<h6>Sources</h6>
+					<ul>
+						<li>Mathieu, E., Ritchie, H., Ortiz-Ospina, E. et al. A global database of COVID-19 vaccinations. Nat Hum Behav (2021). https://doi.org/10.1038/s41562-021-01122-8</li>
+					</ul>
+				</div>
 			</div>
 		</main>
 	</body>

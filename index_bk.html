@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="js/scripts.js"></script>
+		<link rel="stylesheet" href="style.css">
+		<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+		<link rel="manifest" href="favicon/site.webmanifest">
+		<title>Dev - Interesting Stats</title>
+	</head>
+	<body>
+		<header class="header">
+		<div class="container">
+			<h1>InterestingStats.org</h1>
+		</div>
+		</header>
+		<main>
+			<div class="container">
+				<h1>COVID-19 Vaccine Stats</h1>
+				<p>Refresh this page for the latest figures.</p>
+				<p>Hover over a figure for the last updated date.</p>
+
+				<div class="search-form-wrap">
+					<form>
+						<input id="search-input" class="form-control" type="text" placeholder="Search for a Country" />
+					</form>
+				</div>
+				<div class="table-wrap">
+					<table class="table">
+						<thead>
+							<tr>
+								<th class="th-number" data-colname="number" data-order="asc">#</th>
+								<th class="th-click th-country" data-colname="country" data-order="asc">Country,<br />Other</th>
+								<th class="th-click th-population" data-colname="population" data-order="asc">Population</th>
+								<th class="th-click th-daily-people-vaccinated" data-colname="daily_people_vaccinated" data-order="asc">Daily<br />People<br />Vaccinated</th>
+								<th class="th-click th-daily-people-vaccinated-per-hundred" data-colname="daily_people_vaccinated_per_hundred" data-order="asc">Daily<br />People<br />Vaccinated<br />Per 100</th>
+								<th class="th-click th-daily-vaccinations" data-colname="daily_vaccinations" data-order="asc">Daily<br />Vaccinations</th>
+								<th class="th-click th-single-dose" data-colname="single_dose" data-order="asc">Single<br />Dose</th>
+								<th class="th-click th-single-dose-percent" data-colname="single_dose_percent" data-order="asc">Single<br />Dose&nbsp;%</th>
+								<th class="th-click th-double-dose" data-colname="double_dose" data-order="asc">Double<br />Dose</th>
+								<th class="th-click th-double-dose-percent" data-colname="double_dose_percent" data-order="asc">Double<br />Dose&nbsp;%</th>
+							</tr>
+						</thead>
+						<tbody id="myTable">
+
+						</tbody>
+					</table>
+				</div>
+				<script src="js/data.js"></script>
+				<script src="js/tables.js"></script>
+			</div>
+		</main>
+	</body>
+</html>
